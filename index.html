@@ -69,18 +69,95 @@ html, body {
     100% { transform: translateX(-50%); }
 }
 
+/* 起動時名言表示 */
+.startup-quote {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.95);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: fadeOut 4s forwards;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; pointer-events: none; }
+}
+
+.startup-quote-text {
+    color: #ffcc00;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 40px;
+    max-width: 800px;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.8);
+    line-height: 1.5;
+}
+
+.startup-quote-author {
+    color: #ffffff;
+    font-size: 1.5rem;
+    margin-top: 20px;
+    font-style: italic;
+}
+
+/* 結果表示エリア */
+.result-display {
+    position: fixed;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(204, 0, 0, 0.9);
+    padding: 20px 30px;
+    border-radius: 15px;
+    border: 3px solid #ffcc00;
+    max-width: 90%;
+    width: 600px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: 50;
+    pointer-events: none;
+}
+
+.result-display.show {
+    opacity: 1;
+}
+
+.result-quote {
+    color: #ffcc00;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.result-author {
+    color: #ffffff;
+    font-size: 0.9rem;
+    text-align: center;
+    font-style: italic;
+}
+
 .roulette-container {
     position: relative;
     width: 500px;
     height: 500px;
-    margin-top: 80px;
+    margin-top: 120px;
 }
 
-/* ポインター（キャラ）を右側に配置 */
 .character-pointer {
     position: absolute;
     top: 50%;
-    right: -130px; /* ルーレットの右外側 */
+    right: -130px;
     width: 150px;
     height: 150px;
     transform: translateY(-50%);
@@ -89,22 +166,20 @@ html, body {
     object-fit: contain;
 }
 
-/* 三角形のポインターを左向きにして右側に配置 */
 .triangle-pointer {
     position: absolute;
     top: 50%;
-    right: -20px; /* ルーレットの端に刺さる位置 */
+    right: -20px;
     width: 0;
     height: 0;
     border-top: 30px solid transparent;
     border-bottom: 30px solid transparent;
-    border-right: 50px solid #ffcc00; /* 右側から左を向く矢印 */
+    border-right: 50px solid #ffcc00;
     transform: translateY(-50%);
     z-index: 11;
     filter: drop-shadow(-5px 0 10px rgba(0,0,0,0.5));
 }
 
-/* 右側配置用の揺れアニメーション */
 @keyframes crazy-shake-right {
     0% { transform: translateY(-50%) translate(0,0) rotate(0) scale(1); }
     25% { transform: translateY(-50%) translate(-10px,10px) rotate(-15deg) scale(1.1); }
@@ -125,7 +200,7 @@ canvas {
 }
 
 .controls {
-    margin-top: 50px;
+    margin-top: 30px;
     z-index: 10;
 }
 
@@ -160,11 +235,131 @@ canvas {
     color: white;
     display: flex;
     gap: 10px;
+    z-index: 10;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .roulette-container {
+        width: 350px;
+        height: 350px;
+        margin-top: 100px;
+    }
+    
+    canvas {
+        width: 350px !important;
+        height: 350px !important;
+    }
+    
+    .character-pointer {
+        right: -90px;
+        width: 100px;
+        height: 100px;
+    }
+    
+    .triangle-pointer {
+        right: -15px;
+        border-top: 20px solid transparent;
+        border-bottom: 20px solid transparent;
+        border-right: 35px solid #ffcc00;
+    }
+    
+    .scrolling-text span {
+        font-size: 1.5rem;
+        padding: 0 50px;
+    }
+    
+    .startup-quote-text {
+        font-size: 1.8rem;
+        padding: 20px;
+    }
+    
+    .startup-quote-author {
+        font-size: 1.2rem;
+    }
+    
+    .result-display {
+        top: 100px;
+        width: 90%;
+        padding: 15px 20px;
+    }
+    
+    .result-quote {
+        font-size: 1rem;
+    }
+    
+    .result-author {
+        font-size: 0.8rem;
+    }
+    
+    #spin-btn {
+        padding: 12px 40px;
+        font-size: 1.2rem;
+    }
+    
+    .controls {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .roulette-container {
+        width: 280px;
+        height: 280px;
+        margin-top: 90px;
+    }
+    
+    canvas {
+        width: 280px !important;
+        height: 280px !important;
+    }
+    
+    .character-pointer {
+        right: -70px;
+        width: 80px;
+        height: 80px;
+    }
+    
+    .triangle-pointer {
+        right: -12px;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-right: 25px solid #ffcc00;
+    }
+    
+    .scrolling-text span {
+        font-size: 1.2rem;
+        padding: 0 30px;
+    }
+    
+    .startup-quote-text {
+        font-size: 1.4rem;
+        padding: 15px;
+    }
+    
+    .startup-quote-author {
+        font-size: 1rem;
+    }
+    
+    .result-display {
+        top: 90px;
+    }
+    
+    #spin-btn {
+        padding: 10px 30px;
+        font-size: 1rem;
+    }
 }
 </style>
 </head>
 
 <body>
+
+<!-- 起動時名言 -->
+<div class="startup-quote" id="startup-quote">
+    <div class="startup-quote-text" id="startup-text"></div>
+    <div class="startup-quote-author" id="startup-author"></div>
+</div>
 
 <div class="soviet-header">
     <div class="scrolling-text">
@@ -189,6 +384,12 @@ canvas {
     <button id="spin-btn">ルーレット開始！</button>
 </div>
 
+<!-- 結果表示エリア -->
+<div class="result-display" id="result-display">
+    <div class="result-quote" id="result-quote"></div>
+    <div class="result-author" id="result-author"></div>
+</div>
+
 <div class="volume-controls">
     <span>Vol</span>
     <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
@@ -202,25 +403,101 @@ const charImg = document.getElementById("char-img");
 const video = document.getElementById("bg-video");
 const volumeSlider = document.getElementById("volume-slider");
 
-const items = ["アンドロポフ", "ゴルバチョフ", "ブレジネフ", "フルシチョフ", "レーニン", "スターリン"];
+const items = ["レーニン", "スターリン", "フルシチョフ", "ブレジネフ", "アンドロポフ", "ゴルバチョフ"];
 const colors = ["#cc0000", "#8b0000", "#ff0000", "#b22222", "#dc143c", "#8b0000"];
 
 const imageFiles = [
-    "yu-ri.jpg",
-    "GorbachevMS.jpg",
-    "Leonid_Brezjnev,_leider_van_de_Sovjet-Unie,_Bestanddeelnr_925-6564.jpg.webp",
-    "Nikita_Khrusjtsjov.jpg",
     "re-ninn.webp",
-    "starrin.jpg"
+    "starrin.jpg",
+    "Nikita_Khrusjtsjov.jpg",
+    "Leonid_Brezjnev,_leider_van_de_Sovjet-Unie,_Bestanddeelnr_925-6564.jpg.webp",
+    "yu-ri.jpg",
+    "GorbachevMS.jpg"
 ];
+
+// 名言データベース
+const quotes = {
+    "起動時": [
+        { text: "さあ行こう（Поехали! / パイェーハリ）", author: "ユーリイ・ガガーリン" },
+        { text: "万国の労働者よ、団結せよ!（Пролетарии всех стран, соединяйтесь!）", author: "共産主義のスローガン" },
+        { text: "神などいない", author: "ユーリイ・ガガーリン" },
+        { text: "絹の手袋をはめてでは革命は出来ない", author: "ヨシフ・スターリン" },
+        { text: "1人の死は悲劇だが、100万人の死は統計上の数字でしかない", author: "ヨシフ・スターリン" },
+        { text: "この壁を壊しなさい！（Tear down this wall!）", author: "ロナルド・レーガン" }
+    ],
+    "レーニン": [
+        { text: "学ぶこと、学ぶこと、そしてさらに学ぶことだ", author: "ウラジーミル・レーニン / Владимир Ленин" },
+        { text: "政治は経済の集中した表現である", author: "ウラジーミル・レーニン / Владимир Ленин" },
+        { text: "理論のない実践は盲目であり、実践のない理論は空論である", author: "ウラジーミル・レーニン / Владимир Ленин" },
+        { text: "信頼することは良いことだ。だが、管理することはもっと良いことだ", author: "ウラジーミル・レーニン / Владимир Ленин" },
+        { text: "何十年も何も起こらないことがある。そして、数週間のうちに数十年分が起こることもある", author: "ウラジーミル・レーニン / Владимир Ленин" }
+    ],
+    "スターリン": [
+        { text: "一人の死は悲劇だが、数百万人の死は統計にすぎない", author: "ヨシフ・スターリン / Иосиф Сталин" },
+        { text: "投票する者は何も決定できない。投票を集計する者がすべてを決定する", author: "ヨシフ・スターリン / Иосиф Сталин" },
+        { text: "教育は武器だ。その効果は、誰がそれを手にし、誰に向けて放たれるかによって決まる", author: "ヨシフ・スターリン / Иосиф Сталин" },
+        { text: "感謝という感情は、犬が患う病気のようなものだ", author: "ヨシフ・スターリン / Иосиф Сталин" },
+        { text: "人間がいれば問題がある。人間がいなくなれば、問題もなくなる", author: "ヨシフ・スターリン / Иосиф Сталин" }
+    ],
+    "フルシチョフ": [
+        { text: "我々はお前たちを葬ってやる！", author: "ニキータ・フルシチョフ / Никита Хрущёв" },
+        { text: "政治家というのは、川がないところにさえ橋を架けると約束するものだ", author: "ニキータ・フルシチョフ / Никита Хрущёв" },
+        { text: "歴史は我々の味方だ。私は、お前たちの孫が社会主義の下で暮らすのを見るまで長生きするつもりだ", author: "ニキータ・フルシチョフ / Никита Хрущёв" },
+        { text: "核戦争が起これば、生き残った者は死んだ者を羨むことになるだろう", author: "ニキータ・フルシチョフ / Никита Хрущёв" },
+        { text: "ロバの尻尾で描いたほうが、もっとマシな絵が描けるぞ", author: "ニキータ・フルシチョフ / Никита Хрущёв" }
+    ],
+    "ブレジネフ": [
+        { text: "我々にとって最も重要なのは、平穏な労働と生活のための条件を整えることだ", author: "レオニード・ブレジネフ / Леонид Брежнев" },
+        { text: "社会主義国家の主権は、全世界の社会主義の利益に反してはならない", author: "レオニード・ブレジネフ / Леонид Брежнев" },
+        { text: "誰もが給料だけで生活しているわけではないだろう", author: "レオニード・ブレジネフ / Леонид Брежнев" },
+        { text: "外交とは、可能な限り多くの友人を作り、可能な限り少ない敵を残す技術である", author: "レオニード・ブレジネフ / Леонид Брежнев" },
+        { text: "俳優とは、自分自身ではない人物を演じる。政治家とは、自分自身の役割を演じる", author: "レオニード・ブレジネフ / Леонид Брежнев" }
+    ],
+    "アンドロポフ": [
+        { text: "我々は、自分たちが生きている社会のことを、まだ十分に知り尽くしていない", author: "ユーリ・アンドロポフ / Юрий Андропов" },
+        { text: "経済を動かすのは、単なるスローガンではなく、厳格な規律と責任感である", author: "ユーリ・アンドロポフ / Юрий Андропов" },
+        { text: "人権とは、国家の安全と安定が確保されて初めて成立するものだ", author: "ユーリ・アンドロポフ / Юрий Андропов" },
+        { text: "変化は必要だが、それは一歩一歩、計算されたものでなければならない", author: "ユーリ・アンドロポフ / Юрий Андропов" },
+        { text: "敵を知ることは、敵を倒すことの半分である", author: "ユーリ・アンドロポフ / Юрий Андропов" }
+    ],
+    "ゴルバチョフ": [
+        { text: "我々は、もうこれまでのようには生きていけない", author: "ミハイル・ゴルバチョフ / Михаил Горбачёв" },
+        { text: "遅れてやってくる者は、人生によって罰せられる", author: "ミハイル・ゴルバチョフ / Михаил Горбачёв" },
+        { text: "より多くの民主主義を、より多くの社会主義を", author: "ミハイル・ゴルバチョフ / Михаил Горбачёв" },
+        { text: "暴力によって問題を解決しようとする時代は終わった", author: "ミハイル・ゴルバチョフ / Михаил Горбачёв" },
+        { text: "私は、わが国民がもはや大国としての権利と尊厳を失ったとは考えていない。我々は、自由な人々になったのだ", author: "ミハイル・ゴルバチョフ / Михаил Горбачёв" }
+    ]
+};
 
 let currentRotation = 0;
 let loadedImages = [];
 
-imageFiles.forEach((src, index) => {
+// 起動時にランダムで名言表示
+function showStartupQuote() {
+    const startupQuotes = quotes["起動時"];
+    const randomQuote = startupQuotes[Math.floor(Math.random() * startupQuotes.length)];
+    document.getElementById("startup-text").textContent = randomQuote.text;
+    document.getElementById("startup-author").textContent = "— " + randomQuote.author;
+}
+
+// 画像読み込み
+let loadCount = 0;
+imageFiles.forEach((file, index) => {
     const img = new Image();
-    img.src = src;
-    img.onload = () => drawRoulette();
+    img.onload = () => {
+        loadCount++;
+        if (loadCount === imageFiles.length) {
+            drawRoulette();
+        }
+    };
+    img.onerror = () => {
+        console.error(`エラー: ${file}`);
+        loadCount++;
+        if (loadCount === imageFiles.length) {
+            drawRoulette();
+        }
+    };
+    img.src = file;
     loadedImages[index] = img;
 });
 
@@ -240,7 +517,7 @@ function drawRoulette() {
         ctx.arc(250, 250, 250, angle, angle + arc);
         ctx.fill();
         
-        if (loadedImages[i] && loadedImages[i].complete) {
+        if (loadedImages[i] && loadedImages[i].complete && loadedImages[i].width > 0) {
             ctx.save();
             ctx.translate(250, 250);
             ctx.rotate(angle + arc / 2);
@@ -268,6 +545,9 @@ function drawRoulette() {
 btn.addEventListener("click", () => {
     btn.disabled = true;
     charImg.classList.add("is-spinning");
+    
+    // 結果表示を非表示
+    document.getElementById("result-display").classList.remove("show");
 
     video.muted = false;
     video.play().catch(err => console.error(err));
@@ -275,17 +555,31 @@ btn.addEventListener("click", () => {
     const extraSpin = 360 * 8;
     const randomDegree = Math.random() * 360;
     
-    // 右側（0度方向）で判定するため、回転計算を微調整
     currentRotation += extraSpin + randomDegree;
     canvas.style.transform = `rotate(${currentRotation}deg)`;
 
     setTimeout(() => {
         btn.disabled = false;
         charImg.classList.remove("is-spinning");
+        
+        // 当選者を判定（右側0度基準）
+        const finalAngle = currentRotation % 360;
+        const segmentAngle = 360 / items.length;
+        const winnerIndex = Math.floor((360 - finalAngle + segmentAngle / 2) / segmentAngle) % items.length;
+        const winner = items[winnerIndex];
+        
+        // 当選者の名言をランダム表示
+        const winnerQuotes = quotes[winner];
+        const randomQuote = winnerQuotes[Math.floor(Math.random() * winnerQuotes.length)];
+        
+        document.getElementById("result-quote").textContent = `"${randomQuote.text}"`;
+        document.getElementById("result-author").textContent = "— " + randomQuote.author;
+        document.getElementById("result-display").classList.add("show");
     }, 4000);
 });
 
-drawRoulette();
+// 起動時名言表示
+showStartupQuote();
 </script>
 
 </body>
