@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>爆音キャラルーレット</title>
+
+<style>
+:root {
+    --pointer-size: 100px;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    font-family: 'Hiragino Kaku Gothic ProN', sans-serif;
+}
+
+/* 背景動画 */
+#bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+}
+
+/* ソ連ヘッダー */
+.soviet-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, #cc0000, #ff0000, #cc0000);
+    padding: 20px 0;
+    z-index: 100;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(204, 0, 0, 0.7);
+    border-bottom: 5px solid #ffcc00;
+}
+
+.scrolling-text {
+    display: flex;
+    white-space: nowrap;
+    animation: scroll-left 15s linear infinite;
+}
+
+.scrolling-text span {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ffcc00;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+    padding: 0 100px;
+    font-family: 'Arial Black', sans-serif;
+    letter-spacing: 3px;
+}
+
+@keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.roulette-container {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    margin-top: 80px;
+}
+
+/* ポインター（キャラ）を右側に配置 */
+.character-pointer {
+    position: absolute;
+    top: 50%;
+    right: -130px; /* ルーレットの右外側 */
+    width: 150px;
+    height: 150px;
+    transform: translateY(-50%);
+    z-index: 10;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+    object-fit: contain;
+}
+
+/* 三角形のポインターを左向きにして右側に配置 */
+.triangle-pointer {
+    position: absolute;
+    top: 50%;
+    right: -20px; /* ルーレットの端に刺さる位置 */
+    width: 0;
+    height: 0;
+    border-top: 30px solid transparent;
+    border-bottom: 30px solid transparent;
+    border-right: 50px solid #ffcc00; /* 右側から左を向く矢印 */
+    transform: translateY(-50%);
+    z-index: 11;
+    filter: drop-shadow(-5px 0 10px rgba(0,0,0,0.5));
+}
+
+/* 右側配置用の揺れアニメーション */
+@keyframes crazy-shake-right {
+    0% { transform: translateY(-50%) translate(0,0) rotate(0) scale(1); }
+    25% { transform: translateY(-50%) translate(-10px,10px) rotate(-15deg) scale(1.1); }
+    50% { transform: translateY(-50%) translate(10px,-10px) rotate(15deg) scale(0.9); }
+    75% { transform: translateY(-50%) translate(-15px,-5px) rotate(-25deg) scale(1.2); }
+    100% { transform: translateY(-50%) translate(0,0) rotate(0) scale(1); }
+}
+
+.is-spinning {
+    animation: crazy-shake-right 0.05s infinite;
+}
+
+canvas {
+    border-radius: 50%;
+    border: 10px solid rgba(255,255,255,0.9);
+    background: white;
+    transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
+}
+
+.controls {
+    margin-top: 50px;
+    z-index: 10;
+}
+
+#spin-btn {
+    padding: 15px 60px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(45deg, #ff4757, #ff6b81);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+}
+
+#spin-btn:active {
+    transform: scale(0.95);
+}
+
+#spin-btn:disabled {
+    background: #666;
+    box-shadow: none;
+}
+
+.volume-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.6);
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    gap: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="soviet-header">
+    <div class="scrolling-text">
+        <span>万国の労働者よ、団結せよ！</span>
+        <span>Пролетарии всех стран, соединяйтесь!</span>
+        <span>万国の労働者よ、団結せよ！</span>
+        <span>Пролетарии всех стран, соединяйтесь!</span>
+    </div>
+</div>
+
+<video id="bg-video" loop autoplay playsinline muted>
+    <source src="videoplayback.mp4" type="video/mp4">
+</video>
+
+<div class="roulette-container">
+    <img src="IMG_1059.png" class="character-pointer" id="char-img">
+    <div class="triangle-pointer"></div>
+    <canvas id="roulette" width="500" height="500"></canvas>
+</div>
+
+<div class="controls">
+    <button id="spin-btn">ルーレット開始！</button>
+</div>
+
+<div class="volume-controls">
+    <span>Vol</span>
+    <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
+</div>
+
+<script>
+const canvas = document.getElementById("roulette");
+const ctx = canvas.getContext("2d");
+const btn = document.getElementById("spin-btn");
+const charImg = document.getElementById("char-img");
+const video = document.getElementById("bg-video");
+const volumeSlider = document.getElementById("volume-slider");
+
+const items = ["アンドロポフ", "ゴルバチョフ", "ブレジネフ", "フルシチョフ", "レーニン", "スターリン"];
+const colors = ["#cc0000", "#8b0000", "#ff0000", "#b22222", "#dc143c", "#8b0000"];
+
+const imageFiles = [
+    "yu-ri.jpg",
+    "GorbachevMS.jpg",
+    "Leonid_Brezjnev,_leider_van_de_Sovjet-Unie,_Bestanddeelnr_925-6564.jpg.webp",
+    "Nikita_Khrusjtsjov.jpg",
+    "re-ninn.webp",
+    "starrin.jpg"
+];
+
+let currentRotation = 0;
+let loadedImages = [];
+
+imageFiles.forEach((src, index) => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => drawRoulette();
+    loadedImages[index] = img;
+});
+
+video.volume = volumeSlider.value;
+volumeSlider.addEventListener("input", e => { video.volume = e.target.value; });
+
+function drawRoulette() {
+    const arc = Math.PI * 2 / items.length;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    items.forEach((item, i) => {
+        const angle = i * arc;
+        
+        ctx.beginPath();
+        ctx.fillStyle = colors[i];
+        ctx.moveTo(250, 250);
+        ctx.arc(250, 250, 250, angle, angle + arc);
+        ctx.fill();
+        
+        if (loadedImages[i] && loadedImages[i].complete) {
+            ctx.save();
+            ctx.translate(250, 250);
+            ctx.rotate(angle + arc / 2);
+            ctx.beginPath();
+            ctx.arc(130, 0, 50, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(loadedImages[i], 80, -50, 100, 100);
+            ctx.restore();
+        }
+
+        ctx.save();
+        ctx.translate(250, 250);
+        ctx.rotate(angle + arc / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#ffcc00";
+        ctx.font = "bold 20px sans-serif";
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 3;
+        ctx.strokeText(item, 230, 10);
+        ctx.fillText(item, 230, 10);
+        ctx.restore();
+    });
+}
+
+btn.addEventListener("click", () => {
+    btn.disabled = true;
+    charImg.classList.add("is-spinning");
+
+    video.muted = false;
+    video.play().catch(err => console.error(err));
+
+    const extraSpin = 360 * 8;
+    const randomDegree = Math.random() * 360;
+    
+    // 右側（0度方向）で判定するため、回転計算を微調整
+    currentRotation += extraSpin + randomDegree;
+    canvas.style.transform = `rotate(${currentRotation}deg)`;
+
+    setTimeout(() => {
+        btn.disabled = false;
+        charImg.classList.remove("is-spinning");
+    }, 4000);
+});
+
+drawRoulette();
+</script>
+
+</body>
+</html>
