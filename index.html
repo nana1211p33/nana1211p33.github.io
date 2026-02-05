@@ -147,6 +147,47 @@ html, body {
     font-style: italic;
 }
 
+/* 名言解説エリア */
+.explanation-display {
+    position: fixed;
+    top: 320px;
+    right: 110px;  /* leftからrightに変更 */
+    background: rgba(204, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    border: 3px solid #ffcc00;
+    max-width: 400px;
+    width: 350px;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: 50;
+    pointer-events: none;
+}
+
+
+.explanation-display.show {
+    opacity: 1;
+}
+
+.explanation-title {
+    color: #ffcc00;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+    border-bottom: 2px solid #ffcc00;
+    padding-bottom: 10px;
+}
+
+.explanation-content {
+    color: #ffffff;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    text-align: justify;
+}
+
 .roulette-container {
     position: relative;
     width: 500px;
@@ -157,27 +198,13 @@ html, body {
 .character-pointer {
     position: absolute;
     top: 50%;
-    right: -130px;
-    width: 150px;
-    height: 150px;
+    right: -280px;
+    width: 500px;
+    height: 500px;
     transform: translateY(-50%);
     z-index: 10;
     filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
     object-fit: contain;
-}
-
-.triangle-pointer {
-    position: absolute;
-    top: 50%;
-    right: -20px;
-    width: 0;
-    height: 0;
-    border-top: 30px solid transparent;
-    border-bottom: 30px solid transparent;
-    border-right: 50px solid #ffcc00;
-    transform: translateY(-50%);
-    z-index: 11;
-    filter: drop-shadow(-5px 0 10px rgba(0,0,0,0.5));
 }
 
 @keyframes crazy-shake-right {
@@ -205,8 +232,11 @@ canvas {
 }
 
 #spin-btn {
-    padding: 15px 60px;
-    font-size: 1.5rem;
+    position: fixed;
+    padding: 75px;
+    top: 540px;
+    right: 104px;
+    font-size: 2rem;
     font-weight: bold;
     border-radius: 50px;
     border: none;
@@ -229,16 +259,63 @@ canvas {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: rgba(0,0,0,0.6);
-    padding: 15px;
-    border-radius: 10px;
+    background: rgba(0,0,0,0.8);
+    padding: 20px;
+    border-radius: 15px;
     color: white;
     display: flex;
+    flex-direction: column;
     gap: 10px;
-    z-index: 10;
+    z-index: 200;
+    min-width: 60px;
+    align-items: center;
 }
 
-/* レスポンシブ対応 */
+.volume-controls span {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+#volume-slider {
+    width: 150px;
+    height: 8px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #555;
+    border-radius: 5px;
+    outline: none;
+}
+
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #ffcc00;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+}
+
+#volume-slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #ffcc00;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+}
+
+@media (max-width: 1200px) {
+    .explanation-display {
+        width: 300px;
+        max-width: 300px;
+        right: 15px;  /* leftからrightに変更 */
+    }
+}
+
+
 @media (max-width: 768px) {
     .roulette-container {
         width: 350px;
@@ -252,16 +329,9 @@ canvas {
     }
     
     .character-pointer {
-        right: -90px;
-        width: 100px;
-        height: 100px;
-    }
-    
-    .triangle-pointer {
-        right: -15px;
-        border-top: 20px solid transparent;
-        border-bottom: 20px solid transparent;
-        border-right: 35px solid #ffcc00;
+        right: -200px;
+        width: 350px;
+        height: 350px;
     }
     
     .scrolling-text span {
@@ -284,6 +354,10 @@ canvas {
         padding: 15px 20px;
     }
     
+    .explanation-display {
+        display: none; /* モバイルでは非表示 */
+    }
+    
     .result-quote {
         font-size: 1rem;
     }
@@ -300,6 +374,27 @@ canvas {
     .controls {
         margin-top: 20px;
     }
+    
+    .volume-controls {
+        bottom: 15px;
+        right: 15px;
+        padding: 15px;
+    }
+    
+    #volume-slider {
+        width: 120px;
+        height: 10px;
+    }
+    
+    #volume-slider::-webkit-slider-thumb {
+        width: 30px;
+        height: 30px;
+    }
+    
+    #volume-slider::-moz-range-thumb {
+        width: 30px;
+        height: 30px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -315,16 +410,9 @@ canvas {
     }
     
     .character-pointer {
-        right: -70px;
-        width: 80px;
-        height: 80px;
-    }
-    
-    .triangle-pointer {
-        right: -12px;
-        border-top: 15px solid transparent;
-        border-bottom: 15px solid transparent;
-        border-right: 25px solid #ffcc00;
+        right: -160px;
+        width: 280px;
+        height: 280px;
     }
     
     .scrolling-text span {
@@ -374,9 +462,14 @@ canvas {
     <source src="videoplayback.mp4" type="video/mp4">
 </video>
 
+<!-- 名言解説エリア -->
+<div class="explanation-display" id="explanation-display">
+    <div class="explanation-title" id="explanation-title">名言解説</div>
+    <div class="explanation-content" id="explanation-content"></div>
+</div>
+
 <div class="roulette-container">
     <img src="arrow.png" class="character-pointer" id="char-img">
-  
     <canvas id="roulette" width="500" height="500"></canvas>
 </div>
 
@@ -415,62 +508,207 @@ const imageFiles = [
     "GorbachevMS.jpg"
 ];
 
-// 名言データベース
+// 名言データベースと解説
 const quotes = {
     "起動時": [
-        { text: "さあ行こう（Поехали! / パイェーハリ）", author: "ユーリイ・ガガーリン" },
-        { text: "万国の労働者よ、団結せよ!（Пролетарии всех стран, соединяйтесь!）", author: "共産主義のスローガン" },
-        { text: "神などいない", author: "ユーリイ・ガガーリン" },
-        { text: "絹の手袋をはめてでは革命は出来ない", author: "ヨシフ・スターリン" },
-        { text: "1人の死は悲劇だが、100万人の死は統計上の数字でしかない", author: "ヨシフ・スターリン" },
-        { text: "この壁を壊しなさい！（Tear down this wall!）", author: "ロナルド・レーガン" }
+        { 
+            text: "さあ行こう（Поехали! / パイェーハリ）", 
+            author: "ユーリイ・ガガーリン",
+            explanation: "1961年4月12日、人類初の宇宙飛行士ユーリイ・ガガーリンが宇宙船ボストーク1号で宇宙に向かう際に発した言葉。この一言は人類の宇宙開発史における最も重要な瞬間を象徴し、ソ連の宇宙技術の優位性を世界に示した歴史的な発言となった。"
+        },
+        { 
+            text: "万国の労働者よ、団結せよ!（Пролетарии всех стран, соединяйтесь!）", 
+            author: "共産主義のスローガン",
+            explanation: "マルクスとエンゲルスの『共産党宣言』（1848年）で使われた有名なスローガン。階級闘争において、世界各国の労働者が国境を超えて団結し、資本主義体制を打倒することを呼びかけた。ソビエト連邦の国章にも刻まれ、国際共産主義運動の象徴となった。"
+        },
+        { 
+            text: "神などいない", 
+            author: "ユーリイ・ガガーリン",
+            explanation: "ガガーリンが宇宙から帰還後に語ったとされる言葉だが、実際には彼自身が直接言ったものではなく、ソ連の無神論宣伝として後に作られた可能性が高い。しかし、この言葉は科学的唯物論に基づくソビエト体制の世界観を象徴的に表現するものとして広く知られるようになった。"
+        },
+        { 
+            text: "絹の手袋をはめてでは革命は出来ない", 
+            author: "ヨシフ・スターリン",
+            explanation: "革命を成功させるためには、時として暴力や強硬手段も必要であることを示唆したスターリンの言葉。優雅で上品な方法では既存の権力構造を打破することはできないという革命思想を表している。スターリンの冷酷で実用主義的な政治手法を象徴する発言として知られる。"
+        },
+        { 
+            text: "1人の死は悲劇だが、100万人の死は統計上の数字でしかない", 
+            author: "ヨシフ・スターリン",
+            explanation: "大量の犠牲者を出した粛清や飢餓政策を正当化するような、スターリンの冷酷な権力観を表すとされる言葉。個人の死には感情的に反応するが、大規模な死については抽象的な数字として捉えてしまう人間心理の問題を指摘している。独裁者の非人道的な思考を象徴する発言とされる。"
+        },
+        { 
+            text: "この壁を壊しなさい！（Tear down this wall!）", 
+            author: "ロナルド・レーガン",
+            explanation: "1987年6月12日、レーガン大統領がベルリンのブランデンブルク門で行った演説での有名な一節。ソ連の指導者ゴルバチョフに向けて、ベルリンの壁の撤去を求めた。この発言は冷戦終結への転換点となり、2年後の1989年にベルリンの壁は実際に崩壊した。"
+        }
     ],
     "レーニン": [
-        { text: "学ぶこと、学ぶこと、そしてさらに学ぶことだ", author: "ウラジーミル・レーニン / Владимир Ленин" },
-        { text: "政治は経済の集中した表現である", author: "ウラジーミル・レーニン / Владимир Ленин" },
-        { text: "理論のない実践は盲目であり、実践のない理論は空論である", author: "ウラジーミル・レーニン / Владимир Ленин" },
-        { text: "信頼することは良いことだ。だが、管理することはもっと良いことだ", author: "ウラジーミル・レーニン / Владимир Ленин" },
-        { text: "何十年も何も起こらないことがある。そして、数週間のうちに数十年分が起こることもある", author: "ウラジーミル・レーニン / Владимир Ленин" }
+        { 
+            text: "学ぶこと、学ぶこと、そしてさらに学ぶことだ", 
+            author: "ウラジーミル・レーニン / Владимир Ленин",
+            explanation: "革命家として、また新しい社会主義国家の指導者として、常に学習と自己改善の重要性を説いたレーニンの教育観を表す言葉。マルクス主義理論の習得だけでなく、実践的な政治技術や経済運営についても絶えず学び続けることの必要性を強調した。"
+        },
+        { 
+            text: "政治は経済の集中した表現である", 
+            author: "ウラジーミル・レーニン / Владимир Ленин",
+            explanation: "マルクス主義の経済決定論をレーニンが発展させた概念。政治的な対立や政策決定の背後には必ず経済的な利害関係があり、政治は経済関係の反映であることを示している。この理論は後のソビエト政治学の基礎となった重要な概念である。"
+        },
+        { 
+            text: "理論のない実践は盲目であり、実践のない理論は空論である", 
+            author: "ウラジーミル・レーニン / Владимир Ленин",
+            explanation: "マルクス主義理論と革命実践の統一を重視したレーニンの方法論。単なる理論研究に留まらず、また無計画な行動主義にも陥らない、理論と実践の弁証法的統一を説いた。これはボルシェヴィキ党の活動方針の基本原理となった。"
+        },
+        { 
+            text: "信頼することは良いことだ。だが、管理することはもっと良いことだ", 
+            author: "ウラジーミル・レーニン / Владимир Ленин",
+            explanation: "革命後の新しい国家建設において、人々への信頼だけでなく、組織的な管理と監督が必要であることを説いた実用主義的な統治論。理想主義だけでは国家運営はできないという、レーニンの現実的な政治観を示している。"
+        },
+        { 
+            text: "何十年も何も起こらないことがある。そして、数週間のうちに数十年分が起こることもある", 
+            author: "ウラジーミル・レーニン / Владимир Ленин",
+            explanation: "歴史の発展が必ずしも漸進的ではなく、革命的な変化によって急激に進展することがあるという、レーニンの歴史観を表した言葉。1917年の二月革命から十月革命まで の短期間での劇的な変化を予見していたような発言として知られる。"
+        }
     ],
     "スターリン": [
-        { text: "一人の死は悲劇だが、数百万人の死は統計にすぎない", author: "ヨシフ・スターリン / Иосиф Сталин" },
-        { text: "投票する者は何も決定できない。投票を集計する者がすべてを決定する", author: "ヨシフ・スターリン / Иосиф Сталин" },
-        { text: "教育は武器だ。その効果は、誰がそれを手にし、誰に向けて放たれるかによって決まる", author: "ヨシフ・スターリン / Иосиф Сталин" },
-        { text: "感謝という感情は、犬が患う病気のようなものだ", author: "ヨシフ・スターリン / Иосиф Сталин" },
-        { text: "人間がいれば問題がある。人間がいなくなれば、問題もなくなる", author: "ヨシフ・スターリン / Иосиф Сталин" }
+        { 
+            text: "一人の死は悲劇だが、数百万人の死は統計にすぎない", 
+            author: "ヨシフ・スターリン / Иосиф Сталин",
+            explanation: "スターリン時代の大粛清や強制集団化による大量の犠牲者を正当化するような冷酷な発言とされる。個人の死には感情移入するが、大規模な死については数字として冷静に扱うという、独裁者の非人道的な思考を象徴する言葉として広く知られている。"
+        },
+        { 
+            text: "投票する者は何も決定できない。投票を集計する者がすべてを決定する", 
+            author: "ヨシフ・スターリン / Иосиф Сталин",
+            explanation: "民主主義制度の欺瞞性を指摘し、実際の権力がどこにあるかを率直に述べた言葉。選挙制度があっても、票を数える側が結果を操作できれば真の民主主義ではないという、権力の本質に関する鋭い洞察を示している。現代の選挙不正問題にも通じる指摘である。"
+        },
+        { 
+            text: "教育は武器だ。その効果は、誰がそれを手にし、誰に向けて放たれるかによって決まる", 
+            author: "ヨシフ・スターリン / Иосиф Сталин",
+            explanation: "教育の持つ政治的な力を端的に表現した言葉。教育は中立的なものではなく、支配階級が民衆を統制するための強力な道具になりうることを示している。ソビエト体制下での思想教育や プロパガンダの重要性を物語る発言である。"
+        },
+        { 
+            text: "感謝という感情は、犬が患う病気のようなものだ", 
+            author: "ヨシフ・スターリン / Иосиф Сталин",
+            explanation: "人間関係における感謝の感情を否定的に捉えた、スターリンの冷酷な人間観を表す言葉。権力者として、他者への感謝や恩義を弱さと見なし、常に警戒心と猜疑心を持ち続けるべきだという、独裁者特有の孤独で疑心暗鬼な心理状態を反映している。"
+        },
+        { 
+            text: "人間がいれば問題がある。人間がいなくなれば、問題もなくなる", 
+            author: "ヨシフ・スターリン / Иосиф Сталин",
+            explanation: "政治的な問題や反対勢力を物理的に排除することで解決しようとする、スターリンの極端な統治手法を表した言葉。大粛清や強制移住政策などの背景にある、人命を軽視した独裁的な問題解決法を如実に示している非人道的な発言である。"
+        }
     ],
     "フルシチョフ": [
-        { text: "我々はお前たちを葬ってやる！", author: "ニキータ・フルシチョフ / Никита Хрущёв" },
-        { text: "政治家というのは、川がないところにさえ橋を架けると約束するものだ", author: "ニキータ・フルシチョフ / Никита Хрущёв" },
-        { text: "歴史は我々の味方だ。私は、お前たちの孫が社会主義の下で暮らすのを見るまで長生きするつもりだ", author: "ニキータ・フルシチョフ / Никита Хрущёв" },
-        { text: "核戦争が起これば、生き残った者は死んだ者を羨むことになるだろう", author: "ニキータ・フルシチョフ / Никита Хрущёв" },
-        { text: "ロバの尻尾で描いたほうが、もっとマシな絵が描けるぞ", author: "ニキータ・フルシチョフ / Никита Хрущёв" }
+        { 
+            text: "我々はお前たちを葬ってやる！", 
+            author: "ニキータ・フルシチョフ / Никита Хрущёв",
+            explanation: "1956年に西側諸国の外交官に向けて発した挑発的な発言。「埋葬する」という表現は軍事的な意味ではなく、経済競争において資本主義を歴史的に打ち負かすという意味だったとされるが、冷戦の緊張を高めた有名な言葉となった。"
+        },
+        { 
+            text: "政治家というのは、川がないところにさえ橋を架けると約束するものだ", 
+            author: "ニキータ・フルシチョフ / Никита Хрущёв",
+            explanation: "政治家の公約の非現実性や、民衆に対する甘い約束の問題を皮肉った言葉。実現不可能なことでも選挙で勝つために約束してしまう政治家の本質を鋭く指摘した、フルシチョフの政治的な洞察力を示す発言である。"
+        },
+        { 
+            text: "歴史は我々の味方だ。私は、お前たちの孫が社会主義の下で暮らすのを見るまで長生きするつもりだ", 
+            author: "ニキータ・フルシチョフ / Никита Хрущёв",
+            explanation: "社会主義体制の最終的な勝利への確信を表明した発言。資本主義諸国に対して、歴史の必然として社会主義が勝利し、将来的には全世界が社会主義体制になるという強い信念を示している。冷戦期のイデオロギー対立を象徴する言葉である。"
+        },
+        { 
+            text: "核戦争が起これば、生き残った者は死んだ者を羨むことになるだろう", 
+            author: "ニキータ・フルシチョフ / Никита Хрущёв",
+            explanation: "核兵器の恐ろしさを率直に表現した言葉。キューバ危機などの緊張状態を経験したフルシチョフが、核戦争の悲惨さと文明破壊の可能性を深く理解していたことを示している。核軍縮の必要性を訴える際に使用された印象的な表現である。"
+        },
+        { 
+            text: "ロバの尻尾で描いたほうが、もっとマシな絵が描けるぞ", 
+            author: "ニキータ・フルシチョフ / Никита Хрущёв",
+            explanation: "1962年にモスクワの現代美術展で抽象画を見た際の激しい批判の言葉。ソビエトの公式的な芸術観である社会主義リアリズムに反する前衛芸術を強く非難した発言で、芸術における党の指導性と検閲制度を象徴する出来事となった。"
+        }
     ],
     "ブレジネフ": [
-        { text: "我々にとって最も重要なのは、平穏な労働と生活のための条件を整えることだ", author: "レオニード・ブレジネフ / Леонид Брежнев" },
-        { text: "社会主義国家の主権は、全世界の社会主義の利益に反してはならない", author: "レオニード・ブレジネフ / Леонид Брежнев" },
-        { text: "誰もが給料だけで生活しているわけではないだろう", author: "レオニード・ブレジネフ / Леонид Брежнев" },
-        { text: "外交とは、可能な限り多くの友人を作り、可能な限り少ない敵を残す技術である", author: "レオニード・ブレジネフ / Леонид Брежнев" },
-        { text: "俳優とは、自分自身ではない人物を演じる。政治家とは、自分自身の役割を演じる", author: "レオニード・ブレジネフ / Леонид Брежнев" }
+        { 
+            text: "我々にとって最も重要なのは、平穏な労働と生活のための条件を整えることだ", 
+            author: "レオニード・ブレジネフ / Леонид Брежнев",
+            explanation: "ブレジネフ時代の「安定」を重視する政策方針を表した言葉。スターリン時代の恐怖政治やフルシチョフ時代の改革の混乱から脱却し、国民に平穏で予測可能な生活を提供することを最優先とした統治理念を示している。"
+        },
+        { 
+            text: "社会主義国家の主権は、全世界の社会主義の利益に反してはならない", 
+            author: "レオニード・ブレジネフ / Леонид Брежнев",
+            explanation: "1968年のチェコスロバキア侵攻を正当化するために提唱された「ブレジネフ・ドクトリン」の核心となる考え方。社会主義陣営の結束を維持するためには、個別の国家主権よりも全体の社会主義体制の利益を優先すべきだという論理を示している。"
+        },
+        { 
+            text: "誰もが給料だけで生活しているわけではないだろう", 
+            author: "レオニード・ブレジネフ / Леонид Брежнев",
+            explanation: "ソビエト社会に蔓延していた汚職や闇取引の現実を暗に認めた発言。公式な給料制度だけでは生活が成り立たず、様々な非公式なルートでの利益獲得が日常化していたソビエト経済の実態を率直に表現した言葉である。"
+        },
+        { 
+            text: "外交とは、可能な限り多くの友人を作り、可能な限り少ない敵を残す技術である", 
+            author: "レオニード・ブレジネフ / Леонид Брежнев",
+            explanation: "デタント（緊張緩和）政策を推進したブレジネフの現実主義的な外交観を示した言葉。イデオロギー対立を前面に出すのではなく、実利的な国際関係の構築を重視する姿勢を表している。冷戦期における柔軟な外交戦略の基本的な考え方である。"
+        },
+        { 
+            text: "俳優とは、自分自身ではない人物を演じる。政治家とは、自分自身の役割を演じる", 
+            author: "レオニード・ブレジネフ / Леонид Брежнев",
+            explanation: "政治における演技性と真正性の関係について語った興味深い発言。政治家は虚構の人物を演じるのではなく、自分自身の政治的役割を演じているのだという、政治的パフォーマンスの本質に関する洞察を示している。"
+        }
     ],
     "アンドロポフ": [
-        { text: "我々は、自分たちが生きている社会のことを、まだ十分に知り尽くしていない", author: "ユーリ・アンドロポフ / Юрий Андропов" },
-        { text: "経済を動かすのは、単なるスローガンではなく、厳格な規律と責任感である", author: "ユーリ・アンドロポフ / Юрий Андропов" },
-        { text: "人権とは、国家の安全と安定が確保されて初めて成立するものだ", author: "ユーリ・アンドロポフ / Юрий Андропов" },
-        { text: "変化は必要だが、それは一歩一歩、計算されたものでなければならない", author: "ユーリ・アンドロポフ / Юрий Андропов" },
-        { text: "敵を知ることは、敵を倒すことの半分である", author: "ユーリ・アンドロポフ / Юрий Андропов" }
+        { 
+            text: "我々は、自分たちが生きている社会のことを、まだ十分に知り尽くしていない", 
+            author: "ユーリ・アンドロポフ / Юрий Андропов",
+            explanation: "KGB議長出身のアンドロポフが、ソビエト社会の複雑さと改革の必要性を認識していたことを示す発言。表面的な理解ではなく、社会の深層構造を分析する必要性を説いた、後のペレストロイカへの思想的な先駆けとなる認識である。"
+        },
+        { 
+            text: "経済を動かすのは、単なるスローガンではなく、厳格な規律と責任感である", 
+            author: "ユーリ・アンドロポフ / Юрий Андропov",
+            explanation: "ブレジネフ時代の経済停滞を打破するために、労働規律の強化と個人責任の明確化を重視したアンドロポフの改革理念。イデオロギー的なスローガンだけでは経済は改善されず、実際的な管理と責任体制が必要だという現実的な経済観を示している。"
+        },
+        { 
+            text: "人権とは、国家の安全と安定が確保されて初めて成立するものだ", 
+            author: "ユーリ・アンドロポフ / Юрий Андропов",
+            explanation: "人権と国家安全保障の優先順位について語った、治安当局出身者らしい発言。個人の自由よりも集団の安全を重視する社会主義的価値観と、KGB的な統制重視の思想が結合した考え方を表している。"
+        },
+        { 
+            text: "変化は必要だが、それは一歩一歩、計算されたものでなければならない", 
+            author: "ユーリ・アンドロポフ / Юрий Андропов",
+            explanation: "急進的な改革よりも漸進的で慎重な変化を重視したアンドロポフの改革哲学。KGBでの経験から、急激な変化が体制の不安定化を招く危険性を理解し、統制された段階的な改革の必要性を説いた慎重派の考え方である。"
+        },
+        { 
+            text: "敵を知ることは、敵を倒すことの半分である", 
+            author: "ユーリ・アンドロポフ / Юрий Андропов",
+            explanation: "諜報活動の重要性を説いた、KGB議長としての経験に基づく戦略論。相手の能力、意図、弱点を正確に把握することが勝利の前提条件であるという、情報戦における基本原理を示した言葉である。孫子の兵法にも通じる古典的な戦略思想でもある。"
+        }
     ],
     "ゴルバチョフ": [
-        { text: "我々は、もうこれまでのようには生きていけない", author: "ミハイル・ゴルバチョフ / Михаил Горбачёв" },
-        { text: "遅れてやってくる者は、人生によって罰せられる", author: "ミハイル・ゴルバチョフ / Михаил Горбачёв" },
-        { text: "より多くの民主主義を、より多くの社会主義を", author: "ミハイル・ゴルバチョフ / Михаил Горбачёв" },
-        { text: "暴力によって問題を解決しようとする時代は終わった", author: "ミハイル・ゴルバチョフ / Михаил Горбачёв" },
-        { text: "私は、わが国民がもはや大国としての権利と尊厳を失ったとは考えていない。我々は、自由な人々になったのだ", author: "ミハイル・ゴルバチョフ / Михаил Горбачёв" }
+        { 
+            text: "我々は、もうこれまでのようには生きていけない", 
+            author: "ミハイル・ゴルバチョフ / Михаил Горбачёв",
+            explanation: "ペレストロイカ（再建）とグラスノスチ（情報公開）による根本的な体制改革の必要性を訴えた、ゴルバチョフ改革の核心となる認識。従来のソビエト体制では国家の発展が限界に達しており、抜本的な変革が不可欠だという改革派の基本思想を表している。"
+        },
+        { 
+            text: "遅れてやってくる者は、人生によって罰せられる", 
+            author: "ミハイル・ゴルバチョフ / Михаил Горбачёв",
+            explanation: "改革の緊急性と、変化に適応できない者への警告を含んだ言葉。歴史の変化に遅れをとることの危険性を示し、積極的に時代の流れに対応することの重要性を説いた。東欧革命期における各国共産党指導者への間接的な警告としても解釈される。"
+        },
+        { 
+            text: "より多くの民主主義を、より多くの社会主義を", 
+            author: "ミハイル・ゴルバチョフ / Михаил Горбачёv",
+            explanation: "民主化と社会主義の両立を目指したゴルバチョフの理想を表すスローガン。従来の権威主義的な社会主義ではなく、民主的な参加と自由を保障する新しい社会主義の可能性を模索した改革理念である。"
+        },
+        { 
+            text: "暴力によって問題を解決しようとする時代は終わった", 
+            author: "ミハイル・ゴルバチョフ / Михаил Górбачёв",
+            explanation: "冷戦終結と軍拡競争からの脱却を宣言した平和主義的な発言。核兵器時代における戦争の非合理性を認識し、対話と協調による問題解決を重視する新しい国際関係の構築を提唱した歴史的に重要な宣言である。"
+        },
+        { 
+            text: "私は、わが国民がもはや大国としての権利と尊厳を失ったとは考えていない。我々は、自由な人々になったのだ", 
+            author: "ミハイル・ゴルバチョフ / Михаил Горбачёв",
+            explanation: "ソ連崩壊後の新しいロシアの価値観について語った言葉。軍事力や領土の大きさによる威信よりも、自由と民主主義という普遍的価値に基づく国家の尊厳を重視する考え方を示している。権威主義から自由主義への価値転換を表現した発言である。"
+        }
     ]
 };
 
 let currentRotation = 0;
 let loadedImages = [];
+let currentQuote = null;
 
 // 起動時にランダムで名言表示
 function showStartupQuote() {
@@ -548,7 +786,10 @@ btn.addEventListener("click", () => {
     
     // 結果表示を非表示
     document.getElementById("result-display").classList.remove("show");
+    document.getElementById("explanation-display").classList.remove("show");
 
+    // 動画を最初から再生
+    video.currentTime = 0;
     video.muted = false;
     video.play().catch(err => console.error(err));
 
@@ -562,19 +803,31 @@ btn.addEventListener("click", () => {
         btn.disabled = false;
         charImg.classList.remove("is-spinning");
         
-        // 当選者を判定（右側0度基準）
-        const finalAngle = currentRotation % 360;
+        // 当選者を判定（修正版）
+        const normalizedRotation = currentRotation % 360;
         const segmentAngle = 360 / items.length;
-        const winnerIndex = Math.floor((360 - finalAngle + segmentAngle / 2) / segmentAngle) % items.length;
+        
+        // 右側（3時方向）を基準に判定
+        const adjustedAngle = (360 - normalizedRotation) % 360;
+        const winnerIndex = Math.floor(adjustedAngle / segmentAngle) % items.length;
         const winner = items[winnerIndex];
+        
+        console.log(`回転角度: ${normalizedRotation}°, 当選: ${winner}`);
         
         // 当選者の名言をランダム表示
         const winnerQuotes = quotes[winner];
         const randomQuote = winnerQuotes[Math.floor(Math.random() * winnerQuotes.length)];
+        currentQuote = randomQuote;
         
         document.getElementById("result-quote").textContent = `"${randomQuote.text}"`;
         document.getElementById("result-author").textContent = "— " + randomQuote.author;
         document.getElementById("result-display").classList.add("show");
+        
+        // 解説表示
+        document.getElementById("explanation-title").textContent = "名言解説";
+        document.getElementById("explanation-content").textContent = randomQuote.explanation;
+        document.getElementById("explanation-display").classList.add("show");
+        
     }, 4000);
 });
 
