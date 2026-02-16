@@ -34,11 +34,23 @@ html, body {
     z-index: -1;
 }
 
+/* 近江住宅動画 */
+#omi-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 9999;
+    display: none;
+}
+
 /* ヘッダーボタン群 */
 .header-buttons {
     position: fixed;
-    top: 80px;
-    left: 20px;
+    top: 20px;
+    right: 20px;
     display: flex;
     gap: 15px;
     z-index: 151;
@@ -61,21 +73,76 @@ html, body {
     transform: scale(1.05);
 }
 
+/* ハンバーガーボタンアイコン */
+.hamburger-icon {
+    width: 30px;
+    height: 24px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.hamburger-icon span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: #ffcc00;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.hamburger-icon.active span:nth-child(1) {
+    transform: translateY(10.5px) rotate(45deg);
+}
+
+.hamburger-icon.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-icon.active span:nth-child(3) {
+    transform: translateY(-10.5px) rotate(-45deg);
+}
+
+/* 近江住宅ボタン */
+.omi-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(204, 0, 0, 0.9);
+    color: #ffcc00;
+    border: 3px solid #ffcc00;
+    padding: 15px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.3rem;
+    font-weight: bold;
+    transition: all 0.3s;
+    z-index: 150;
+}
+
+.omi-btn:hover {
+    background: rgba(204, 0, 0, 1);
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+}
+
 /* ハンバーガーメニュー */
 .hamburger-menu {
     position: fixed;
-    top: 140px;
-    left: 20px;
+    top: 0;
+    right: 0;
     background: rgba(0, 0, 0, 0.95);
-    padding: 30px;
-    border-radius: 15px;
-    border: 3px solid #ffcc00;
+    padding: 80px 30px 30px 30px;
+    border-radius: 0;
+    border-left: 3px solid #ffcc00;
     width: 500px;
-    max-height: calc(100vh - 180px);
+    height: 100vh;
     overflow-y: auto;
     z-index: 150;
-    transform: translateX(-600px);
-    transition: transform 0.3s;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hamburger-menu.show {
@@ -150,18 +217,18 @@ html, body {
 /* 設定パネル */
 .settings-panel {
     position: fixed;
-    top: 140px;
-    left: 20px;
+    top: 0;
+    right: 0;
     background: rgba(0, 0, 0, 0.95);
-    padding: 30px;
-    border-radius: 15px;
-    border: 3px solid #ffcc00;
+    padding: 80px 30px 30px 30px;
+    border-radius: 0;
+    border-left: 3px solid #ffcc00;
     width: 450px;
-    max-height: calc(100vh - 180px);
+    height: 100vh;
     overflow-y: auto;
     z-index: 150;
-    transform: translateX(-550px);
-    transition: transform 0.3s;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .settings-panel.show {
@@ -511,6 +578,15 @@ canvas {
     background: rgba(204, 0, 0, 0.7);
     color: rgb(252, 185, 0);
     box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+    transition: all 0.3s ease;
+}
+
+#spin-btn:hover {
+    background: linear-gradient(135deg, #ffcc00 0%, #ff9900 50%, #ffcc00 100%);
+    color: #000000;
+    box-shadow: 0 0 30px rgba(255, 204, 0, 0.8), 0 0 60px rgba(255, 204, 0, 0.5);
+    transform: scale(1.05);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
 #spin-btn:active {
@@ -520,6 +596,13 @@ canvas {
 #spin-btn:disabled {
     background: #666;
     box-shadow: none;
+    cursor: not-allowed;
+}
+
+#spin-btn:disabled:hover {
+    background: #666;
+    box-shadow: none;
+    transform: scale(1);
 }
 
 .volume-controls {
@@ -589,7 +672,7 @@ canvas {
 @media (max-width: 768px) {
     .header-buttons {
         top: 70px;
-        left: 10px;
+        right: 10px;
         gap: 10px;
     }
     
@@ -600,13 +683,8 @@ canvas {
     
     .settings-panel, .hamburger-menu {
         width: 90%;
-        left: 5%;
-        top: 120px;
-        transform: translateX(0) translateY(-500px);
-    }
-    
-    .settings-panel.show, .hamburger-menu.show {
-        transform: translateX(0) translateY(0);
+        right: 0;
+        top: 0;
     }
     
     .roulette-container {
@@ -687,6 +765,13 @@ canvas {
         width: 30px;
         height: 30px;
     }
+    
+    .omi-btn {
+        bottom: 80px;
+        left: 15px;
+        padding: 12px 20px;
+        font-size: 1.1rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -737,9 +822,18 @@ canvas {
 
 <!-- ヘッダーボタン群 -->
 <div class="header-buttons">
-    <button class="header-btn" id="hamburger-toggle">☰</button>
+    <button class="header-btn" id="hamburger-toggle">
+        <div class="hamburger-icon" id="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </button>
     <button class="header-btn" id="settings-toggle">⚙️</button>
 </div>
+
+<!-- 近江住宅ボタン -->
+<button class="omi-btn" id="omi-btn">🏠 近江住宅</button>
 
 <!-- ハンバーガーメニュー -->
 <div class="hamburger-menu" id="hamburger-menu">
@@ -842,6 +936,10 @@ canvas {
     <source src="videoplayback.mp4" type="video/mp4">
 </video>
 
+<video id="omi-video" playsinline>
+    <source src="omimusic.mp4" type="video/mp4">
+</video>
+
 <!-- 名言解説エリア -->
 <div class="explanation-display" id="explanation-display">
     <div class="explanation-title" id="explanation-title">名言解説</div>
@@ -874,11 +972,14 @@ const ctx = canvas.getContext("2d");
 const btn = document.getElementById("spin-btn");
 const charImg = document.getElementById("char-img");
 const video = document.getElementById("bg-video");
+const omiVideo = document.getElementById("omi-video");
+const omiBtn = document.getElementById("omi-btn");
 const volumeSlider = document.getElementById("volume-slider");
 const settingsToggle = document.getElementById("settings-toggle");
 const settingsPanel = document.getElementById("settings-panel");
 const hamburgerToggle = document.getElementById("hamburger-toggle");
 const hamburgerMenu = document.getElementById("hamburger-menu");
+const hamburgerIcon = document.getElementById("hamburger-icon");
 
 // デフォルトデータ
 const defaultData = {
@@ -899,16 +1000,43 @@ let colors = [...defaultData.colors];
 let imageFiles = [...defaultData.imageFiles];
 let spinDuration = 4000;
 
+// 近江住宅ボタン機能
+omiBtn.addEventListener("click", () => {
+    omiVideo.style.display = "block";
+    omiVideo.currentTime = 0;
+    omiVideo.volume = volumeSlider.value;
+    
+    omiVideo.play().catch(err => {
+        console.error("動画再生エラー:", err);
+        alert("動画ファイル (omimusic.mp4) が見つかりません。");
+    });
+    
+    // 動画終了時に非表示
+    omiVideo.onended = () => {
+        omiVideo.style.display = "none";
+    };
+});
+
+// F10キーで回転開始
+document.addEventListener("keydown", (e) => {
+    if (e.key === "F10" && !btn.disabled) {
+        e.preventDefault();
+        btn.click();
+    }
+});
+
 // パネルのトグル
 settingsToggle.addEventListener("click", () => {
     const isSettingsShown = settingsPanel.classList.toggle("show");
     if (isSettingsShown) {
         hamburgerMenu.classList.remove("show");
+        hamburgerIcon.classList.remove("active");
     }
 });
 
 hamburgerToggle.addEventListener("click", () => {
     const isHamburgerShown = hamburgerMenu.classList.toggle("show");
+    hamburgerIcon.classList.toggle("active");
     if (isHamburgerShown) {
         settingsPanel.classList.remove("show");
     }
@@ -1088,7 +1216,7 @@ document.getElementById("reset-btn").addEventListener("click", () => {
     }
 });
 
-// 名言データベース（前のコードと同じ - 長いので省略しますが、完全版には含めてください）
+// 名言データベース
 const quotes = {
     "起動時": [
         { 
@@ -1332,7 +1460,10 @@ function loadImages() {
 }
 
 video.volume = volumeSlider.value;
-volumeSlider.addEventListener("input", e => { video.volume = e.target.value; });
+volumeSlider.addEventListener("input", e => { 
+    video.volume = e.target.value;
+    omiVideo.volume = e.target.value;
+});
 
 function drawRoulette() {
     const arc = Math.PI * 2 / items.length;
