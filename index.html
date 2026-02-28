@@ -1016,9 +1016,12 @@ omiBtn.addEventListener("click", () => {
         omiVideo.style.display = "none";
     };
 });
-
-// F10キーで回転開始
+// F9=近江住宅、F10=ルーレット開始
 document.addEventListener("keydown", (e) => {
+    if (e.key === "F9") {
+        e.preventDefault();
+        omiBtn.click(); // 近江住宅を再生
+    }
     if (e.key === "F10" && !btn.disabled) {
         e.preventDefault();
         btn.click();
